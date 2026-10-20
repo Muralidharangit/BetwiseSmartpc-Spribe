@@ -661,7 +661,8 @@ export const ValidationModals: React.FC<ValidationModalProps> = ({
               PC Not Authorized
             </h3>
 
-            <p className="text-light small mb-4 px-2" style={{ lineHeight: "1.5", fontSize: "0.88rem", opacity: 0.95 }}>
+            {/* Single clean line */}
+            <p className="small mb-3 px-2 text-center" style={{ color: "#cbd5e1", fontSize: "0.88rem", lineHeight: "1.4" }}>
               Please contact the shop cashier to authorize this Machine.
             </p>
 

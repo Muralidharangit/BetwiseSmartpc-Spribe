@@ -21,15 +21,14 @@ export const Registration: React.FC<RegistrationProps> = ({
   const [wizardStep, setWizardStep] = useState<1 | 2>(1);
   const [registeredData, setRegisteredData] = useState<SmartPCRegisterData | null>(null);
 
+  const [currentFp, setCurrentFp] = useState(() => api.getDeviceFingerprint());
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
-
+  const doRegister = async (overrideFp?: string) => {
     const inputToken = registrationToken.trim();
     const inputPortal = portal.trim();
     if (!inputPortal && !inputToken) {
@@ -49,24 +48,16 @@ export const Registration: React.FC<RegistrationProps> = ({
     }
 
     setIsLoading(true);
+    setErrorMessage(null);
+
+    const fpToUse = overrideFp || currentFp || api.getDeviceFingerprint();
 
     try {
-      // Clear out previous machine/shop cache before new registration to prevent stale shop details
-      const previousToken = localStorage.getItem("winbet_registration_token");
-      if (previousToken !== inputToken.toUpperCase()) {
-        localStorage.removeItem("winbet_machine_id");
-        localStorage.removeItem("winbet_numeric_id");
-        localStorage.removeItem("winbet_shop_name");
-        localStorage.removeItem("winbet_machine_name");
-        localStorage.removeItem("winbet_player_id");
-        localStorage.removeItem("winbet_shop_id");
-      }
-
       // PDF Flow #1: POST /smart-pcs/register (Live API call)
       const data = await api.registerSmartPC({
         portal_slug: inputPortal.toLowerCase(),
         registration_token: inputToken.toUpperCase(),
-        device_fingerprint: api.getDeviceFingerprint(),
+        device_fingerprint: fpToUse,
         operating_system: navigator.userAgent.includes("Windows") ? "Windows 11" : "Linux",
       });
 
@@ -86,20 +77,54 @@ export const Registration: React.FC<RegistrationProps> = ({
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await doRegister();
+  };
+
+  const handleResetFingerprintAndRetry = async () => {
+    const newFp = api.generateNewDeviceFingerprint();
+    setCurrentFp(newFp);
+    showToast("Generated new device fingerprint. Registering now...");
+    await doRegister(newFp);
+  };
+
+
   const handleContinueToPlatform = () => {
     const path = machineType === "terminal" ? "/terminal" : "/smart-pc";
     navigate(path);
   };
 
+  const hasExistingMachine = Boolean(localStorage.getItem("winbet_machine_id"));
+
   return (
-    <div className="d-flex flex-column min-vh-100" style={{ background: "radial-gradient(circle at 50% 15%, #1d0938 0%, #080214 100%)" }}>
+    <div
+      className="d-flex flex-column min-vh-100"
+      style={{
+        background: "linear-gradient(180deg, rgba(6, 43, 72, 0.78) 0%, rgba(4, 25, 42, 0.92) 100%), url('/assets/images/bg-1.png') center/cover no-repeat fixed",
+      }}
+    >
       <div className="container-fluid px-lg-5 py-3 d-flex flex-column flex-grow-1">
         {/* Center Content Wrapper */}
         <div className="my-auto w-100 py-2">
           <div id="wizardContainer" className="row justify-content-center py-2">
-            <div className="col-12 col-md-8 col-lg-5 col-xl-4">
+            <div className="col-12 col-md-8 col-lg-5 col-xl-4 text-center">
+              {/* Official Betwise Brand Logo */}
+              <div className="text-center mb-3">
+                <img
+                  src="/assets/images/betwise-logo.png"
+                  alt="Betwise"
+                  style={{
+                    height: "48px",
+                    width: "auto",
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 4px 14px rgba(0, 0, 0, 0.7))",
+                  }}
+                />
+              </div>
+
               <div
-                className="winbet-card active-step-card"
+                className="winbet-card active-step-card text-start"
                 style={{
                   animation: "modalPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards",
                   minHeight: "auto",
@@ -111,6 +136,17 @@ export const Registration: React.FC<RegistrationProps> = ({
                     <form id="flowScreen1" onSubmit={handleSubmit} className="text-start">
                       <div className="d-flex align-items-center justify-content-between mb-1">
                         <h2 className="card-heading mb-0 text-start">Register Machine</h2>
+                        {hasExistingMachine && (
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-outline-info py-0 px-2"
+                            style={{ fontSize: "0.75rem", borderRadius: "6px" }}
+                            onClick={() => navigate(machineType === "terminal" ? "/terminal" : "/smart-pc")}
+                            title="Machine is already registered. Enter lobby directly."
+                          >
+                            <i className="fa-solid fa-arrow-right-to-bracket me-1"></i> Lobby
+                          </button>
+                        )}
                       </div>
                       <p className="text-secondary small mb-3" style={{ fontSize: "0.82rem" }}>
                         Enter the portal and shop setup code to claim your machine.
@@ -159,36 +195,50 @@ export const Registration: React.FC<RegistrationProps> = ({
                           className="alert alert-danger py-2 px-3 mb-3 small text-light bg-danger bg-opacity-25 border-danger rounded-3"
                           style={{ fontSize: "0.82rem" }}
                         >
-                          <div className="d-flex align-items-center gap-2">
-                            <i className="fa-solid fa-triangle-exclamation text-danger fs-5"></i>
-                            <div>
+                          <div className="d-flex align-items-start gap-2">
+                            <i className="fa-solid fa-triangle-exclamation text-danger fs-5 mt-1"></i>
+                            <div className="w-100">
                               <strong>Registration Error:</strong>
-                              <div>{errorMessage}</div>
+                              <div className="mb-2">{errorMessage}</div>
+
+                              {/* Helpful action buttons when PC is already registered */}
+                              {errorMessage.toLowerCase().includes("already registered") && (
+                                <div className="mt-2 pt-2 border-top border-danger border-opacity-25 d-flex flex-column gap-2">
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-warning text-dark fw-bold w-100 py-1"
+                                    style={{ borderRadius: "6px" }}
+                                    onClick={handleResetFingerprintAndRetry}
+                                    disabled={isLoading}
+                                  >
+                                    <i className="fa-solid fa-arrows-rotate me-1"></i>
+                                    Reset Device ID & Register Now
+                                  </button>
+
+                                  {hasExistingMachine && (
+                                    <button
+                                      type="button"
+                                      className="btn btn-sm btn-outline-light w-100 py-1"
+                                      style={{ borderRadius: "6px" }}
+                                      onClick={() => navigate(machineType === "terminal" ? "/terminal" : "/smart-pc")}
+                                    >
+                                      <i className="fa-solid fa-desktop me-1"></i>
+                                      Continue to Smart PC Lobby
+                                    </button>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
                       )}
 
                       {/* Buttons */}
-                      <div className="d-flex justify-content-between align-items-center gap-2 mt-4" id="btnGroupScreen1">
-                        <button
-                          type="button"
-                          className="btn btn-secondary fw-semibold"
-                          style={{
-                            borderRadius: "8px",
-                            background: "rgba(255,255,255,0.1)",
-                            color: "#fff",
-                            border: "1px solid rgba(255,255,255,0.2)",
-                            padding: "0.5rem 1.2rem",
-                          }}
-                          onClick={() => navigate(-1)}
-                        >
-                          Close
-                        </button>
+                      <div className="mt-4" id="btnGroupScreen1">
                         <button
                           type="submit"
-                          className="btn-winbet flex-grow-1"
-                          style={{ padding: "0.5rem 1.2rem" }}
+                          className="btn-winbet w-100"
+                          style={{ padding: "0.6rem 1.2rem" }}
                           disabled={isLoading}
                         >
                           {isLoading ? (

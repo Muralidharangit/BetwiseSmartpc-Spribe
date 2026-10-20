@@ -26,7 +26,7 @@ export const GamingLayout: React.FC<GamingLayoutProps> = ({
   machineType,
   machineName,
   shopName,
-  shopLocation,
+  shopLocation: _shopLocation,
   balance,
   actionText,
   onPrimaryAction,
@@ -72,27 +72,7 @@ export const GamingLayout: React.FC<GamingLayoutProps> = ({
       <footer className="smart-pc-dock">
         <div className="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-3">
           {/* Bottom Left: Shop Location */}
-          <ShopLocation shopName={shopName} location={shopLocation} />
-
-          {/* Middle: Quick Bet Presets */}
-          {/* <div className="d-none d-lg-flex align-items-center gap-2">
-            <span className="text-secondary small fw-semibold">DEFAULT BET:</span>
-            {[10, 25, 50, 100].map((val) => (
-              <button
-                key={val}
-                type="button"
-                className={`btn btn-sm py-1 px-3 rounded-pill ${
-                  defaultBet === val
-                    ? "btn-warning text-dark fw-bold"
-                    : "btn-outline-secondary text-light"
-                }`}
-                style={{ borderColor: "#59259c" }}
-                onClick={() => setDefaultBet(val)}
-              >
-                N$ {val}
-              </button>
-            ))}
-          </div> */}
+          <ShopLocation shopName={shopName} />
 
           {/* Right: Dock Action Button & Admin Unlock Indicator */}
           <div className="d-flex align-items-center gap-2">
@@ -113,8 +93,6 @@ export const GamingLayout: React.FC<GamingLayoutProps> = ({
           </div>
         </div>
       </footer>
-
-
 
       {/* WinBet Theme Modal Popup (Replaces plain toast) */}
       <ThemeNotificationModal

@@ -1,52 +1,66 @@
 /* ==========================================================================
-   WINBET MASTER DESIGN SYSTEM - THEME TOKENS
-   Source of Truth based on Register.html & Gaming Machine Standards
+   BETWISE MASTER DESIGN SYSTEM - THEME TOKENS
+   Deep Navy Blue surfaces, Neon Green accents, White/Light-gray text
    ========================================================================== */
 
 :root {
-  /* Exact Color Tokens from Register Theme */
-  --bg-deep: #060212;
-  --bg-card: #0d0622;
-  --bg-card-glass: rgba(13, 6, 34, 0.9);
-  --card-bg-gradient: linear-gradient(180deg, #13092e 0%, #0c041f 100%);
-  --inner-panel-bg: rgba(9, 3, 23, 0.85);
+  /* Betwise Core Background Palette */
+  --bg-deep: #063B63;              /* Primary Background: Deep navy blue */
+  --bg-ocean: #073F68;             /* Secondary Background: Dark ocean blue */
+  --bg-header: #06385D;            /* Header & Sidebar: Deep blue */
+  --bg-card: #073F68;              /* Card Background */
+  --bg-card-glass: rgba(7, 63, 104, 0.92);
+  --card-bg-gradient: linear-gradient(180deg, #073F68 0%, #063B63 100%);
+  --inner-panel-bg: rgba(6, 59, 99, 0.88);
 
-  --card-border: #4d1d8f;
-  --card-border-glow: rgba(147, 51, 234, 0.45);
-  --card-inner-glow: rgba(112, 26, 212, 0.15);
-  --border-purple-glow: #6f26d9;
-  --border-purple-light: #9d4edd;
+  /* Borders & Dividers */
+  --card-border: #0B4A70;          /* Subtle dark teal-blue */
+  --card-border-glow: rgba(53, 229, 45, 0.25);
+  --card-inner-glow: rgba(11, 74, 112, 0.45);
+  --border-teal-subtle: #0B4A70;
+  --border-teal-glow: #10669b;
 
-  /* Vibrant Buttons */
-  --purple-btn-start: #7d12f5;
-  --purple-btn-mid: #6811db;
-  --purple-btn-end: #4908a8;
-  --purple-btn-gradient: linear-gradient(180deg, #781ff5 0%, #590fc9 50%, #4609a3 100%);
-  --purple-btn-hover: linear-gradient(180deg, #8a35ff 0%, #6817e8 50%, #510bbd 100%);
+  /* Vibrant Betwise Green Buttons & Accents */
+  --btn-green-primary: #009D50;     /* Primary Button */
+  --btn-green-start: #00B84F;       /* Button Gradient Start */
+  --btn-green-end: #008A3D;         /* Button Gradient End */
+  --btn-border-neon: #35E52D;       /* Button Border: Neon green */
+  --btn-highlight: #42F52B;         /* Button Highlight: Vivid lime green */
+  --accent-green: #00A85A;          /* Accent Green */
+
+  /* Legacy Button Variable Mappings -> Point to Betwise Green */
+  --purple-btn-start: #00B84F;
+  --purple-btn-mid: #009D50;
+  --purple-btn-end: #008A3D;
+  --purple-btn-gradient: linear-gradient(180deg, #00B84F 0%, #009D50 50%, #008A3D 100%);
+  --purple-btn-hover: linear-gradient(180deg, #10d365 0%, #00b457 50%, #009440 100%);
   
-  /* Cancel / Dark Buttons */
-  --cancel-btn-bg: #15082e;
-  --cancel-btn-border: #3b166d;
+  /* Cancel / Secondary Buttons */
+  --cancel-btn-bg: #042742;
+  --cancel-btn-border: #0B4A70;
 
-  /* Gold & Accents */
-  --gold-accent: #f5b300;
-  --gold-primary: #f5b300;
-  --gold-light: #ffe066;
-  --gold-glow: rgba(245, 179, 0, 0.45);
-  --gold-gradient: linear-gradient(180deg, #ffe066 0%, #f5b300 50%, #d49000 100%);
+  /* Gold & Highlights Mappings -> Clean Betwise Accent Green & Gold */
+  --gold-accent: #35E52D;
+  --gold-primary: #35E52D;
+  --gold-light: #42F52B;
+  --gold-glow: rgba(53, 229, 45, 0.45);
+  --gold-gradient: linear-gradient(180deg, #00B84F 0%, #009D50 50%, #008A3D 100%);
 
-  /* Emerald Green Neon */
-  --neon-green: #22c55e;
-  --neon-green-glow: rgba(34, 197, 94, 0.55);
+  /* Neon Green */
+  --neon-green: #35E52D;
+  --neon-green-glow: rgba(53, 229, 45, 0.55);
 
-  /* Text & Inputs */
-  --text-light: #f3effc;
-  --text-dim: #a491ca;
-  --text-muted-purple: #9d8ec2;
-  --input-border: #3b1875;
-  --input-bg: #090317;
+  /* Typography */
+  --text-white: #FFFFFF;
+  --text-light: #FFFFFF;
+  --text-dim: #D8E2EC;             /* Secondary Text: Light gray */
+  --text-muted-purple: #8CAEC7;     /* Muted cyan-gray */
+  --text-cyan: #00b4d8;            /* Betwise Brand Cyan */
 
-  --navbar-bg: linear-gradient(90deg, #0e0524 0%, #180838 50%, #0e0524 100%);
-  --tile-radius: 18px;
-  --card-radius: 20px;
+  /* Inputs & Header */
+  --input-border: #0B4A70;
+  --input-bg: #042742;
+  --navbar-bg: linear-gradient(90deg, #06385D 0%, #073F68 50%, #06385D 100%);
+  --tile-radius: 14px;
+  --card-radius: 14px;
 }

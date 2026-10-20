@@ -1,10 +1,9 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "swiper/css/effect-fade";
 
 interface SmartPCHeroBannerProps {
   onExploreGames?: () => void;
@@ -12,17 +11,52 @@ interface SmartPCHeroBannerProps {
   onOpenCashout?: () => void;
 }
 
-export const SmartPCHeroBanner: React.FC<SmartPCHeroBannerProps> = () => {
+const SLIDES = [
+  {
+    id: "slide-1",
+    banners: [
+      {
+        id: "sbn2",
+        src: "/assets/banner/sbn2.png",
+        alt: "Betwise Smart PC Special 1",
+      },
+      {
+        id: "sbn3",
+        src: "/assets/banner/sbn3.png",
+        alt: "Betwise Smart PC Special 2",
+      },
+    ],
+  },
+  {
+    id: "slide-2",
+    banners: [
+      {
+        id: "sbn6",
+        src: "/assets/banner/sbn6.png",
+        alt: "Betwise Smart PC Special 3",
+      },
+      {
+        id: "sbn11",
+        src: "/assets/banner/sbn11.png",
+        alt: "Betwise Smart PC Special 4",
+      },
+    ],
+  },
+];
 
+export const SmartPCHeroBanner: React.FC<SmartPCHeroBannerProps> = ({
+  onOpenTournament,
+  onExploreGames,
+}) => {
   return (
-    <div className="smartpc-hero-wrapper mb-4">
+    <div className="smartpc-hero-wrapper mb-3 mb-md-4">
       <div className="smartpc-hero-frame">
         <Swiper
-          modules={[Autoplay, Pagination, Navigation, EffectFade]}
-          effect="fade"
-          fadeEffect={{ crossFade: true }}
+          modules={[Autoplay, Pagination, Navigation]}
+          slidesPerView={1}
+          spaceBetween={0}
           autoplay={{
-            delay: 5500,
+            delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
@@ -37,34 +71,37 @@ export const SmartPCHeroBanner: React.FC<SmartPCHeroBannerProps> = () => {
             nextEl: ".smartpc-hero-btn-next",
           }}
           loop={true}
+          speed={600}
           className="smartpc-hero-swiper"
         >
-          {/* ==============================================================
-               SLIDE 1
-          =============================================================== */}
-          <SwiperSlide>
-            <div className="smartpc-slide p-0">
-              <img src="/assets/banner/bn1.png" alt="Banner 1" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
-            </div>
-          </SwiperSlide>
-
-          {/* ==============================================================
-               SLIDE 2
-          =============================================================== */}
-          <SwiperSlide>
-            <div className="smartpc-slide p-0">
-              <img src="/assets/banner/bn2.png" alt="Banner 2" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
-            </div>
-          </SwiperSlide>
-
-          {/* ==============================================================
-               SLIDE 3
-          =============================================================== */}
-          <SwiperSlide>
-            <div className="smartpc-slide p-0">
-              <img src="/assets/banner/bn3.png" alt="Banner 3" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} />
-            </div>
-          </SwiperSlide>
+          {SLIDES.map((slide) => (
+            <SwiperSlide key={slide.id}>
+              <div className="row g-2 g-md-3 px-1">
+                {slide.banners.map((banner, bIdx) => (
+                  <div key={banner.id} className="col-6">
+                    <div
+                      className="smartpc-dual-banner-card"
+                      onClick={() => {
+                        if (bIdx === 0 && onOpenTournament) {
+                          onOpenTournament();
+                        } else if (onExploreGames) {
+                          onExploreGames();
+                        }
+                      }}
+                    >
+                      <img
+                        src={banner.src}
+                        alt={banner.alt}
+                        className="smartpc-banner-img"
+                        loading="eager"
+                        decoding="async"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
 
         {/* Custom Navigation Controls */}

@@ -26,31 +26,28 @@ export const RegistrationSuccess: React.FC = () => {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div
+      className="d-flex flex-column min-vh-100"
+      style={{
+        background: "linear-gradient(180deg, rgba(6, 43, 72, 0.78) 0%, rgba(4, 25, 42, 0.92) 100%), url('/assets/images/bg-1.png') center/cover no-repeat fixed",
+      }}
+    >
       <div className="container-fluid px-lg-5 py-3 d-flex flex-column flex-grow-1">
         {/* Top Controls Bar */}
         <div
           className="d-flex flex-wrap justify-content-between align-items-center mb-4 border-bottom pb-3"
-          style={{ borderColor: "rgba(94, 23, 187, 0.4)" }}
+          style={{ borderColor: "#0B4A70" }}
         >
           <div className="d-flex align-items-center gap-2">
             <Link to="/register" className="brand-logo-wrap text-decoration-none mb-0">
               <img
-                src="/assets/images/logo.png"
-                alt="BETWISE"
-                className="brand-logo-img logo-sm"
-                style={{ height: "38px" }}
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
+                src="/assets/images/betwise-logo.png"
+                alt="Betwise"
+                style={{ height: "34px", width: "auto", objectFit: "contain" }}
               />
-              <span className="brand-name fs-5">
-                <span style={{ color: "#f5b300" }}>BET</span>
-                <span style={{ color: "#ffffff" }}>WISE</span>
-              </span>
             </Link>
             <span
-              className="badge ms-2 bg-dark text-warning border border-warning-subtle"
+              className="badge ms-2 bg-dark text-success border border-success-subtle"
               style={{ fontSize: "0.75rem" }}
             >
               REGISTRATION PORTAL
@@ -60,8 +57,8 @@ export const RegistrationSuccess: React.FC = () => {
           <div className="d-flex align-items-center gap-3 mt-2 mt-sm-0">
             <button
               type="button"
-              className="btn btn-outline-warning btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2"
-              style={{ borderColor: "#f5b300", color: "#ffdc69" }}
+              className="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2"
+              style={{ borderColor: "#35E52D", color: "#42F52B" }}
               onClick={handleContinue}
             >
               <i className="fa-solid fa-gamepad"></i> Game Lobby
@@ -76,15 +73,11 @@ export const RegistrationSuccess: React.FC = () => {
               <div className="winbet-card active-step-card">
                 <div>
                   {/* Brand Logo */}
-                  <div className="winbet-logo mb-3">
+                  <div className="text-center mb-3">
                     <img
-                      src="/assets/images/logo.png"
-                      alt="BETWISE"
-                      className="brand-logo-img logo-sm"
-                      style={{ maxHeight: "48px" }}
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                      }}
+                      src="/assets/images/betwise-logo.png"
+                      alt="Betwise"
+                      style={{ maxHeight: "48px", width: "auto", objectFit: "contain" }}
                     />
                   </div>
 

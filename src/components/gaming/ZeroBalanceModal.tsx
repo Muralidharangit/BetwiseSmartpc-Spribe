@@ -22,7 +22,7 @@ export const ZeroBalanceModal: React.FC<ZeroBalanceModalProps> = ({
       <div className="modal-body p-4 text-center">
         {/* Step Pill */}
         <div className="step-pill-box justify-content-center mb-3">
-          <span className="pill-text fw-bold text-warning">
+          <span className="pill-text fw-bold text-success" style={{ color: "#35E52D" }}>
             <i className="fa-solid fa-coins me-1"></i> Station Balance Alert
           </span>
         </div>
@@ -53,41 +53,41 @@ export const ZeroBalanceModal: React.FC<ZeroBalanceModalProps> = ({
         <div
           className="p-3 rounded-3 mb-3 text-center"
           style={{
-            background: "radial-gradient(circle at 50% 0%, #200c40 0%, #0d031c 100%)",
-            border: "1.5px solid rgba(245, 179, 0, 0.4)",
-            boxShadow: "0 8px 25px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(245, 179, 0, 0.1)",
+            background: "#042742",
+            border: "1.5px solid #0B4A70",
+            boxShadow: "0 8px 25px rgba(0, 0, 0, 0.6)",
           }}
         >
-          <p className="text-secondary small text-uppercase mb-1" style={{ fontSize: "0.74rem", letterSpacing: "0.5px" }}>
+          <p className="text-secondary small text-uppercase mb-1" style={{ fontSize: "0.74rem", letterSpacing: "0.5px", color: "#8CAEC7" }}>
             Current Balance
           </p>
           <div className="fs-2 fw-bold text-light mb-2">
-            <span className="currency-symbol text-warning me-1">N$</span>
+            <span className="currency-symbol me-1" style={{ color: "#35E52D" }}>N$</span>
             <span>0.00</span>
           </div>
 
           <div
             className="p-2 rounded-2 text-start small mb-1"
-            style={{ background: "rgba(94, 23, 187, 0.25)", border: "1px solid rgba(168, 85, 247, 0.2)" }}
+            style={{ background: "rgba(11, 74, 112, 0.45)", border: "1px solid #0B4A70" }}
           >
             <div className="d-flex align-items-start gap-2 text-light" style={{ fontSize: "0.82rem" }}>
-              <i className="fa-solid fa-cash-register text-warning mt-1"></i>
+              <i className="fa-solid fa-cash-register mt-1" style={{ color: "#35E52D" }}></i>
               <div>
                 <span>Please visit the </span>
-                <strong className="text-warning">Cashier Desk</strong>
+                <strong style={{ color: "#35E52D" }}>Cashier Desk</strong>
                 <span> to load coins </span>
               </div>
             </div>
           </div>
         </div>
 
-        <p className="text-dim small mb-3" style={{ fontSize: "0.78rem" }}>
+        <p className="small mb-3" style={{ fontSize: "0.78rem", color: "#D8E2EC" }}>
           Once coins are loaded by the cashier, your balance will update instantly.
         </p>
 
         {/* Action Button */}
         <div className="d-flex flex-column gap-2">
-          <Button variant="gold" onClick={onClose} className="w-100 py-2 fw-bold text-dark">
+          <Button variant="gold" onClick={onClose} className="w-100 py-2 fw-bold text-light">
             <i className="fa-solid fa-circle-check me-1"></i> Understood, Visit Cashier
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface WinnerItem {
   id: string;
@@ -95,9 +95,10 @@ const RANDOM_GAMES = [
   { name: "Trader", img: "/assets/games/SPRIBE/TRADER.png" },
 ];
 
-export const LiveWinnersTicker: React.FC = () => {
+export const LiveWinnersTicker: React.FC = React.memo(() => {
   const [winners, setWinners] = useState<WinnerItem[]>(INITIAL_WINNERS);
-  const [isPaused, setIsPaused] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -123,31 +124,12 @@ export const LiveWinnersTicker: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const renderCard = (winner: WinnerItem, key: string) => (
-    <div key={key} className="winner-chip-card">
-      <div className="winner-thumb-wrap">
-        <img
-          src={winner.gameImg}
-          alt={winner.game}
-          onError={(e) => {
-            e.currentTarget.src = "/assets/games/1.png";
-          }}
-        />
-      </div>
-      <div className="winner-meta">
-        <div className="d-flex align-items-center justify-content-between gap-2">
-          <span className="winner-player-tag">{winner.player}</span>
-          <span className="winner-multi-badge">{winner.multiplier}</span>
-        </div>
-        <div className="d-flex align-items-center justify-content-between gap-2 mt-1">
-          <span className="winner-amount">
-            N$ {winner.amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </span>
-          <span className="winner-time">{winner.timeAgo}</span>
-        </div>
-      </div>
-    </div>
-  );
+  const handleScroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = direction === "left" ? -280 : 280;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
 
   return (
     <section className="live-winners-ticker-wrap mb-4">
@@ -164,34 +146,70 @@ export const LiveWinnersTicker: React.FC = () => {
         </div>
 
         <div className="d-flex align-items-center gap-2">
-          <div className="text-secondary small d-none d-md-flex align-items-center gap-1 me-1">
+          <div className="text-secondary small d-none d-md-flex align-items-center gap-1 me-2">
             <i className="fa-solid fa-clock-rotate-left"></i>
-            <span>Updating live</span>
+            <span className="text-white">Updating live</span>
           </div>
 
           <button
             type="button"
             className="btn btn-sm btn-outline-secondary text-light rounded-circle p-0 d-flex align-items-center justify-content-center"
             style={{ width: "26px", height: "26px", borderColor: "rgba(139, 92, 246, 0.4)" }}
-            onClick={() => setIsPaused((prev) => !prev)}
-            title={isPaused ? "Resume auto-scroll" : "Pause auto-scroll"}
-            aria-label={isPaused ? "Resume auto-scroll" : "Pause auto-scroll"}
+            onClick={() => handleScroll("left")}
+            aria-label="Scroll left"
           >
-            <i className={`fa-solid ${isPaused ? "fa-play" : "fa-pause"}`} style={{ fontSize: "0.65rem" }}></i>
+            <i className="fa-solid fa-chevron-left" style={{ fontSize: "0.7rem" }}></i>
+          </button>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-secondary text-light rounded-circle p-0 d-flex align-items-center justify-content-center"
+            style={{ width: "26px", height: "26px", borderColor: "rgba(139, 92, 246, 0.4)" }}
+            onClick={() => handleScroll("right")}
+            aria-label="Scroll right"
+          >
+            <i className="fa-solid fa-chevron-right" style={{ fontSize: "0.7rem" }}></i>
           </button>
         </div>
       </div>
 
-      <div className="winners-marquee-container">
-        <div className={`winners-marquee-track ${isPaused ? "paused" : ""}`}>
-          <div className="winners-marquee-content">
-            {winners.map((winner) => renderCard(winner, winner.id))}
-          </div>
-          <div className="winners-marquee-content" aria-hidden="true">
-            {winners.map((winner) => renderCard(winner, `dup-${winner.id}`))}
-          </div>
+      <div
+        ref={scrollRef}
+        className="winners-marquee-container"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          overflowX: "auto",
+        }}
+      >
+        <div className="winners-marquee-row">
+          {winners.map((winner) => (
+            <div key={winner.id} className="winner-chip-card">
+              <div className="winner-thumb-wrap">
+                <img
+                  src={winner.gameImg}
+                  alt={winner.game}
+                  onError={(e) => {
+                    e.currentTarget.src = "/assets/games/1.png";
+                  }}
+                />
+              </div>
+              <div className="winner-meta">
+                <div className="d-flex align-items-center justify-content-between gap-2">
+                  <span className="winner-player-tag">{winner.player}</span>
+                  <span className="winner-multi-badge">{winner.multiplier}</span>
+                </div>
+                <div className="d-flex align-items-center justify-content-between gap-2 mt-1">
+                  <span className="winner-amount">
+                    N$ {winner.amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                  <span className="winner-time">{winner.timeAgo}</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
-};
+});
+

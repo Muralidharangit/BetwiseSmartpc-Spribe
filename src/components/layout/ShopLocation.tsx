@@ -9,7 +9,6 @@ interface ShopLocationProps {
 
 export const ShopLocation: React.FC<ShopLocationProps> = ({
   shopName = shop.name,
-  location: _location = shop.location,
   className = "",
 }) => {
   return (
@@ -21,7 +20,6 @@ export const ShopLocation: React.FC<ShopLocationProps> = ({
         <div className="fw-bold text-light" style={{ fontSize: "0.85rem" }}>
           {shopName}
         </div>
-
       </div>
     </div>
   );
